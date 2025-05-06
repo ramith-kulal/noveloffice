@@ -1,54 +1,29 @@
-# React + TypeScript + Vite
+# Loan Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application developed for the Novel Office assignment to calculate EMI, display amortization schedules, and convert amounts across currencies. Features a responsive design with dark/light mode support.
 
-Currently, two official plugins are available:
+## Features
+- Calculate monthly EMI using loan amount, interest rate, and term.
+- View detailed amortization schedules with currency conversion.
+- Convert amounts into currencies (e.g., USD, AZN) via an exchange rate API.
+- Responsive UI with Material UI components.
+- Dark/light mode for improved user experience.
+- Error handling for inputs and API issues.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- React, TypeScript
+- Material UI, Vite
+- Axios, React Router
 
-## Expanding the ESLint configuration
+## Setup
+1. Clone: `git clone https://github.com/ramith-kulal/noveloffice.git`
+2. Install: `npm install`
+3. Add `.env` with API key
+4. Run: `npm run dev`
+5. Build: `npm run build`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Live Demo
+[https://noveloffice.vercel.app/](https://noveloffice.vercel.app/)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Repository
+[https://github.com/ramith-kulal/noveloffice](https://github.com/ramith-kulal/noveloffice)
