@@ -26,7 +26,6 @@ const useExchangeRates = (): ExchangeRatesResult => {
   const [error, setError] = useState<string | null>(null);
   const [isUsingDummy, setIsUsingDummy] = useState<boolean>(false);
 
-  // Dummy rates matching original assignment
   const dummyRates: { [key: string]: number } = {
     USD: 1,
     AED: 3.6725,
@@ -49,7 +48,7 @@ const useExchangeRates = (): ExchangeRatesResult => {
       setLoading(true);
       try {
         const response = await axios.get<ExchangeRateResponse>(
-          'https://v6.exchangerate-api.com/v6/fee042ad54400d3e699cd20b/latest/USD'
+          `https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_API_KEY}/latest/USD`
         );
         if (response.data.result === 'success') {
           setUsdRates(response.data.conversion_rates);

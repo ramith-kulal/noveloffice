@@ -17,7 +17,9 @@ import {
   Select,
   MenuItem,
   Box,
+  Button,
 } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import useExchangeRates from '../hooks/useExchangeRates';
 
 const ExchangeRates: React.FC = () => {
@@ -32,6 +34,7 @@ const ExchangeRates: React.FC = () => {
   } = useExchangeRates();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
@@ -40,6 +43,10 @@ const ExchangeRates: React.FC = () => {
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleRefresh = () => {
+    setRefreshKey((prev) => prev + 1);
   };
 
   const paginatedCurrencies = currencies.length > 0
@@ -62,7 +69,7 @@ const ExchangeRates: React.FC = () => {
       )}
       {isUsingDummy && !loading && (
         <Alert severity="info" sx={{ mb: 3 }}>
-          Using dummy exchange rates due to API unavailability.
+          Using dummy exchange rates due to API unavailability. Try refreshing.
         </Alert>
       )}
       {currencies.length === 0 && !loading && !error && (
@@ -72,20 +79,30 @@ const ExchangeRates: React.FC = () => {
       )}
       {currencies.length > 0 && (
         <Box>
-          <FormControl sx={{ mb: 3, minWidth: 200 }}>
-            <InputLabel>Base Currency</InputLabel>
-            <Select
-              value={baseCurrency}
-              onChange={(e) => setBaseCurrency(e.target.value)}
+          <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'center' }}>
+            <FormControl sx={{ minWidth: 200 }}>
+              <InputLabel>Base Currency</InputLabel>
+              <Select
+                value={baseCurrency}
+                onChange={(e) => setBaseCurrency(e.target.value)}
+                sx={{ borderRadius: '8px' }}
+              >
+                {currencies.map((curr) => (
+                  <MenuItem key={curr} value={curr}>
+                    {curr}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button
+              variant="outlined"
+              startIcon={<RefreshIcon />}
+              onClick={handleRefresh}
               sx={{ borderRadius: '8px' }}
             >
-              {currencies.map((curr) => (
-                <MenuItem key={curr} value={curr}>
-                  {curr}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              Refresh Rates
+            </Button>
+          </Box>
           <TableContainer
             component={Paper}
             sx={{
