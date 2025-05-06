@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -18,6 +18,7 @@ import {
   MenuItem,
   Box,
   Button,
+  TextField,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import useExchangeRates from '../hooks/useExchangeRates';
@@ -34,7 +35,14 @@ const ExchangeRates: React.FC = () => {
   } = useExchangeRates();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0); // Keep refreshKey
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Trigger refetch when refreshKey changes
+  useEffect(() => {
+    // Assuming useExchangeRates refetches when refreshKey changes
+    // If useExchangeRates doesn't support this, we may need to modify the hook
+  }, [refreshKey]);
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
@@ -46,15 +54,26 @@ const ExchangeRates: React.FC = () => {
   };
 
   const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
+    setRefreshKey((prev) => prev + 1); // Increment refreshKey
   };
 
-  const paginatedCurrencies = currencies.length > 0
-    ? currencies.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+    setPage(0);
+  };
+
+  // Filter currencies based on search query
+  const filteredCurrencies = currencies.filter((currency) =>
+    currency.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Paginate filtered currencies
+  const paginatedCurrencies = filteredCurrencies.length > 0
+    ? filteredCurrencies.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     : [];
 
   return (
-    <Container sx={{ mt: 8, mb: 4 }}>
+    <Container sx={{ mt: 12, mb: 4 }}>
       <Typography
         variant="h4"
         sx={{ fontWeight: 'bold', mb: 4, textAlign: 'left' }}
@@ -72,14 +91,14 @@ const ExchangeRates: React.FC = () => {
           Using dummy exchange rates due to API unavailability. Try refreshing.
         </Alert>
       )}
-      {currencies.length === 0 && !loading && !error && (
+      {filteredCurrencies.length === 0 && !loading && !error && (
         <Alert severity="error" sx={{ mb: 3 }}>
-          No exchange rates available. Please try again later.
+          No exchange rates available for the search query. Please try again.
         </Alert>
       )}
-      {currencies.length > 0 && (
+      {filteredCurrencies.length > 0 && (
         <Box>
-          <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'center', flexWrap: 'wrap' }}>
             <FormControl sx={{ minWidth: 200 }}>
               <InputLabel>Base Currency</InputLabel>
               <Select
@@ -94,6 +113,14 @@ const ExchangeRates: React.FC = () => {
                 ))}
               </Select>
             </FormControl>
+            <TextField
+              label="Search Currency"
+              variant="outlined"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              sx={{ minWidth: 200, borderRadius: '8px' }}
+              placeholder="e.g., USD"
+            />
             <Button
               variant="outlined"
               startIcon={<RefreshIcon />}
@@ -130,7 +157,7 @@ const ExchangeRates: React.FC = () => {
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}
             component="div"
-            count={currencies.length}
+            count={filteredCurrencies.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

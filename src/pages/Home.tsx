@@ -22,10 +22,17 @@ import {
 } from '@mui/material';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import type { GridProps } from '@mui/material';
 import useEMICalculator from '../hooks/useEMICalculator';
 import useExchangeRates from '../hooks/useExchangeRates';
 import { useCurrency } from '../context/CurrencyContext';
+
+// Extend GridProps to include item, xs, sm
+interface CustomGridProps extends GridProps {
+  item?: boolean;
+  xs?: number;
+  sm?: number;
+}
 
 const Home: React.FC = () => {
   const [loanAmount, setLoanAmount] = useState<string>('');
@@ -75,7 +82,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Container sx={{ mt: 8, mb: 4 }}>
+    <Container sx={{ mt: 14, mb: 4 }}>
       <Typography
         variant="h4"
         sx={{ fontWeight: 'bold', mb: 4, textAlign: 'left' }}
@@ -89,7 +96,7 @@ const Home: React.FC = () => {
       )}
       <Box sx={{ mb: 4 }}>
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} {...({ item: true, xs: 12, sm: 4 } as CustomGridProps)}>
             <TextField
               label="Loan Amount"
               type="number"
@@ -101,7 +108,7 @@ const Home: React.FC = () => {
               sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} {...({ item: true, xs: 12, sm: 4 } as CustomGridProps)}>
             <TextField
               label="Annual Interest Rate (%)"
               type="number"
@@ -113,7 +120,7 @@ const Home: React.FC = () => {
               sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} {...({ item: true, xs: 12, sm: 4 } as CustomGridProps)}>
             <TextField
               label="Term (Years)"
               type="number"
@@ -221,10 +228,58 @@ const Home: React.FC = () => {
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Month</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Principal ({currency})</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Interest ({currency})</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Remaining Balance ({currency})</TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 'bold',
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === 'dark' ? '#1e1e1e' : '#f5f5f5',
+                      color: (theme) => theme.palette.text.primary,
+                      borderBottom: (theme) =>
+                        `1px solid ${theme.palette.divider}`,
+                      py: 1.5,
+                    }}
+                  >
+                    Month
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 'bold',
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === 'dark' ? '#1e1e1e' : '#f5f5f5',
+                      color: (theme) => theme.palette.text.primary,
+                      borderBottom: (theme) =>
+                        `1px solid ${theme.palette.divider}`,
+                      py: 1.5,
+                    }}
+                  >
+                    Principal ({currency})
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 'bold',
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === 'dark' ? '#1e1e1e' : '#f5f5f5',
+                      color: (theme) => theme.palette.text.primary,
+                      borderBottom: (theme) =>
+                        `1px solid ${theme.palette.divider}`,
+                      py: 1.5,
+                    }}
+                  >
+                    Interest ({currency})
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 'bold',
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === 'dark' ? '#1e1e1e' : '#f5f5f5',
+                      color: (theme) => theme.palette.text.primary,
+                      borderBottom: (theme) =>
+                        `1px solid ${theme.palette.divider}`,
+                      py: 1.5,
+                    }}
+                  >
+                    Remaining Balance ({currency})
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState } from 'react';
+import type { ReactNode } from 'react';
 
 interface CurrencyContextType {
   currency: string;
@@ -7,12 +8,8 @@ interface CurrencyContextType {
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
-interface CurrencyProviderProps {
-  children: ReactNode;
-}
-
-export const CurrencyProvider: React.FC<CurrencyProviderProps> = ({ children }) => {
-  const [currency, setCurrency] = useState<string>('USD');
+export const CurrencyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [currency, setCurrency] = useState('USD');
 
   return (
     <CurrencyContext.Provider value={{ currency, setCurrency }}>
@@ -21,7 +18,7 @@ export const CurrencyProvider: React.FC<CurrencyProviderProps> = ({ children }) 
   );
 };
 
-export const useCurrency = (): CurrencyContextType => {
+export const useCurrency = () => {
   const context = useContext(CurrencyContext);
   if (!context) {
     throw new Error('useCurrency must be used within a CurrencyProvider');
